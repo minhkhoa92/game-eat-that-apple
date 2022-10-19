@@ -1,0 +1,30 @@
+# created by minhkhoa with help of gitignore.io
+
+dist/
+
+
+# webpack
+# Serverless Webpack directories
+.webpack/
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+
+# Coverage directory used by tools like istanbul
+coverage
+*.lcov
+
+
+# Compiled binary addons (https://nodejs.org/api/addons.html)
+build/Release

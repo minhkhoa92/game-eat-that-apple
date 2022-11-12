@@ -4,7 +4,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       hash: true,
-      title: 'Eat the apple!',
+      title: 'Eat that apple!',
       header: 'Eat the apple title',
       metaDesc: 'Game Clone of Snake',
       template: './src/index.html',
@@ -16,15 +16,30 @@ module.exports = {
   module: {
     rules: [
       {
-        test:/\.html$/,
+        test: /\.html$/,
         use: ['html-loader']
       },
       {
-        test:/\.(jpg)$/,
+        test: /\.js$/,
+        use: ['babel-loader']
+      },
+      {
+        test: /\.(jpg|png|gif|jpeg|svg)$/,
         use: {
-          loader: ['file-loader'], 
+          loader: 'file-loader',
           options: {
-            name: "[name].[ext]"
+            name: "[name].[ext]",
+            outputPath: 'imgs'
+          }
+        }
+      },
+      {
+        test: /\.(wav|mp3)$/,
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: "[name].[ext]",
+            outputPath: 'snds'
           }
         }
       }

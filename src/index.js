@@ -1,1 +1,3 @@
-console.log('hello world, hello sun');
+const Game = require('./Game.js');
+
+Game.start();

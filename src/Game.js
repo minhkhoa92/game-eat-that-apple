@@ -44,8 +44,20 @@ function start() {
 
 
   let snakeData = {};
+  let apple = new Point(-1, -1);
+  const appleImage = Stage.image('apple:apple');
 
   let isPaused = false;
+
+
+  /**
+   * returns a random integer, which is in [0, max)
+   * @param {integer} max
+   * @returns integer
+   */
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
 
   /**
    * generates the object of snakeData with textures, containers, and info of snake part vectors
@@ -167,6 +179,15 @@ function start() {
     body.forEach(function(middleBodyPart) {
       drawSnakePart(middleBodyPart.node, middleBodyPart.direction, middleBodyPart.point);
     });
+  }
+
+  /**
+   * draws the apple
+   */
+  function drawApple() {
+    appleImage.offset(xStart + (1 + apple.x) * tileWidth, yStart + (1 + apple.y) * tileWidth);
+    appleImage.scaleTo(tileWidth, tileWidth, 'in');
+    appleImage.touch();
   }
 
   /**
@@ -302,7 +323,6 @@ function start() {
     case EnumDirection.down:
       headPositionY = (head.point.y + 1) % fieldHeight;
       insertNewHeadPoint(new Point(head.point.x, headPositionY));
-      Music.startMusic();
       break;
     case EnumDirection.left:
       headPositionX = (head.point.x - 1 + fieldWidth) % fieldWidth;
@@ -349,12 +369,7 @@ function start() {
    * @returns
    */
   function updateSnakeData(headDirection) {
-    if (lengthenSnakeCount <= 0) {
-      moveSnake(headDirection);
-      return;
-    }
-    lengthenSnake(headDirection);
-    lengthenSnakeCount--;
+    moveSnake(headDirection);
   }
 
   /**
@@ -364,6 +379,32 @@ function start() {
     drawSnakeHead();
     drawSnakeBody();
     drawSnakeTail();
+  }
+
+  /**
+   * invents a new position for apple
+   */
+  function generateApple() {
+    apple = new Point(
+      getRandomInt(fieldWidth),
+      getRandomInt(fieldHeight)
+    );
+  }
+  /**
+   * checks if the apple (Point) is equal to one of the points of the snake
+   * @returns boolean
+   */
+  function checkAppleInSnake() {
+    let pointsSnake = snakeData.points;
+    const snakeLength = snakeData.length;
+    let appleInSnake = false;
+
+    for(let snakeIndex = 0; snakeIndex < snakeLength; snakeIndex++) {
+      if(pointsSnake[snakeIndex].isEqual(apple)) {
+        return true;
+      }
+    }
+    return appleInSnake;
   }
 
   /**
@@ -392,12 +433,47 @@ function start() {
     default:
       break;
     }
+
+    let newHeadPosition = undefined;
+    switch (headDirection) {
+    case 'up':
+      newHeadPosition = new Point(head.point.x, head.point.y - 1);
+      break;
+    case 'left':
+      newHeadPosition = new Point(head.point.x - 1, head.point.y);
+      break;
+    case 'down':
+      newHeadPosition = new Point(head.point.x, head.point.y + 1);
+      break;
+    case 'right':
+      newHeadPosition = new Point(head.point.x + 1, head.point.y);
+      break;
+    default:
+      break;
+    }
     const ticksElapsed = Math.floor((gameTime) / tickDurationMillisec) - Math.floor(timeLastUpdate / tickDurationMillisec);
     const nextTick = ticksElapsed >= 1;
     if (!nextTick) {
       return true;
     }
-    updateSnakeData(headDirection);
+
+    if (checkAppleInSnake()) {
+      lengthenSnakeCount = 1;
+      if(snakeData.length < 15) {
+        lengthenSnake(headDirection);
+      } else {
+        updateSnakeData(headDirection);
+      }
+      lengthenSnakeCount--;
+      generateApple();
+      while(checkAppleInSnake()) {
+        generateApple();
+      }
+      drawApple();
+    } else {
+      updateSnakeData(headDirection);
+    }
+
     drawSnake();
 
     timeLastUpdate = Math.floor((gameTime) / tickDurationMillisec) * tickDurationMillisec;
@@ -435,7 +511,14 @@ function start() {
 
       drawSnake();
 
+      generateApple();
+      while(checkAppleInSnake()) {
+        generateApple();
+      }
+      drawApple();
+      rootNode.append(appleImage);
 
+      Music.startMusic();
 
       let activeKeys = Object.assign({}, KeyNames);
       /**

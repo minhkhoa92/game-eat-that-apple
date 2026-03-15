@@ -1,28 +1,9 @@
-## Loading the sprites
-* loaded the sprites of blocks and snakes
-* debug messages
-* not a good idea to load blocks 32x32 pixel for each tile on the map
-* still no menu highlights and fonts
-
-## Creating the map
-* scale down to 16x16px blocks at least for mobile
-* fun fact, in old mobile phones the width was wider than the height
-* game screen: 375:211 ratio
-* long side (width) 1040 screen
-* short side (height) 585 screen
-* 20x24 map
-
-## Creating the loop
-* recognizes when the time of the game goes on (after a certain amount of milliseconds Elapsed)
-* loop is quite fast
-* at the start every part of the snake is in a line
-* quite fascinating having the snake run
-
-## Implementing difficulty
+## Implementing difficulty (open ToDo)
 * the snake lengthens
 * the duration of a tick can be changed and changes the speed of the snake
 
 ## Setup dev env on windows
+It has been a while that I installed this in windows
 ```
 npm install
 open in a VisualStudioCode with a few react extensions installed
@@ -53,16 +34,18 @@ npm install --save-dev eslint
 * profit from eslint format in eslint code environment and from learning about a lot of problems which you may not be aware of
 
 ## Setup dev env on Linux
+Nowadays I recommend running it on Linux WSL when on Window. On windows a containerized solution could also help, because in Linux it feels better to change the libraries, and to me it is faster to run performance checking.\
+For productive environment, choose a Operating System, which feels more reliable for you.
+
 ```
 npm install
-npm run
+npm run dev
 ```
-Edit every require left-side part (example: `const a = require(...)` - the a is the important left-side part).
-Change it from `const variableName` to `const {variableName}`
-<br>
-use vim
+
+
 
 ## Credits
+* Stage.js, the main library [Page](https://piqnt.com/stage.js/) / [github](https://github.com/piqnt/stage.js)
 * Snake sprite:  [Page](https://opengameart.org/content/snake-sprite-sheet), Artist: [Blooming Pixels](https://opengameart.org/users/blooming-pixels)
 * Apple sprite: [Page](https://opengameart.org/content/jabolko-apfel-apple-imagespriteicon), Artist: Lamoot
 * Wall sprite: [Page](https://opengameart.org/content/wall-0), Artist: [Alekei](https://opengameart.org/users/alekei)
